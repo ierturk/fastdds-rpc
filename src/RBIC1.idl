@@ -1,0 +1,362 @@
+module RBIC1 {
+    // Enum to identify the type of message
+    enum MessageType {
+        OUTLIN_REQUEST,
+        OUTLIN_REPLY,
+        TLIN_REQUEST,
+        TLIN_REPLY,
+        OUTQUAD_REQUEST,
+        OUTQUAD_REPLY,
+        OUTTHIRD_REQUEST,
+        OUTTHIRD_REPLY,
+        TQUAD_REQUEST,
+        TQUAD_REPLY,
+        OUTLINTLIN_REQUEST,
+        OUTLINTLIN_REPLY,
+        OUTQUADTLIN_REQUEST,
+        OUTQUADTLIN_REPLY,
+        OUTLINTQUAD_REQUEST,
+        OUTLINTQUAD_REPLY,
+        OUTQUADTQUAD_REQUEST,
+        OUTQUADTQUAD_REPLY,
+        ZMD31050_CAL1_REQUEST,
+        ZMD31050_CAL1_REPLY,
+        ZMD31050_SIM1_REQUEST,
+        ZMD31050_SIM1_REPLY,
+        DLLVERSION_REQUEST,
+        DLLVERSION_REPLY,
+        GETMESSAGE_REQUEST,
+        GETMESSAGE_REPLY
+    };
+
+    // Request and reply for OutLin
+    struct OutLinRequest {
+        float zp1m;
+        float zp2m;
+        float a;
+        float b;
+    };
+
+    struct OutLinReply {
+        boolean success;
+        float c0;
+        float c1;
+    };
+
+    // Request and reply for TLin
+    struct TLinRequest {
+        float ztMed;
+        float ztUpp;
+        float tMed;
+        float tUpp;
+    };
+
+    struct TLinReply {
+        boolean success;
+        float ct0;
+        float ct1;
+    };
+
+    // Request and reply for OutQuad
+    struct OutQuadRequest {
+        float zp1m;
+        float zp2m;
+        float zp3m;
+        float a;
+        float b;
+        float m;
+        int32 adcReso;
+    };
+
+    struct OutQuadReply {
+        boolean success;
+        float c0;
+        float c1;
+        float c2;
+    };
+
+    // Request and reply for OutThird
+    struct OutThirdRequest {
+        float zp1m;
+        float zp2m;
+        float zp3m;
+        float zp4m;
+        float a;
+        float b;
+        float m;
+        float m2;
+        int32 adcReso;
+    };
+
+    struct OutThirdReply {
+        boolean success;
+        float c0;
+        float c1;
+        float c2;
+        float c3;
+    };
+
+    // Request and reply for TQuad
+    struct TQuadRequest {
+        float ztLow;
+        float ztUpp;
+        float ztMed;
+        float tLow;
+        float tUpp;
+        float tMed;
+        int32 adcReso;
+    };
+
+    struct TQuadReply {
+        boolean success;
+        float ct0;
+        float ct1;
+        float ct2;
+    };
+
+    // Request and reply for OutLinTLin
+    struct OutLinTLinRequest {
+        float zp1m;
+        float zp2m;
+        float zp1u;
+        float zp2u;
+        float a;
+        float b;
+        float ztMed;
+        float ztUpp;
+        int32 adcReso;
+    };
+
+    struct OutLinTLinReply {
+        boolean success;
+        float c0;
+        float c1;
+        float c4;
+        float c6;
+    };
+
+    // Request and reply for OutQuadTLin
+    struct OutQuadTLinRequest {
+        float zp1m;
+        float zp2m;
+        float zp3m;
+        float zp1u;
+        float zp2u;
+        float a;
+        float b;
+        float m;
+        float ztMed;
+        float ztUpp;
+        int32 adcReso;
+    };
+
+    struct OutQuadTLinReply {
+        boolean success;
+        float c0;
+        float c1;
+        float c2;
+        float c4;
+        float c6;
+    };
+
+    // Request and reply for OutLinTQuad
+    struct OutLinTQuadRequest {
+        float zp1m;
+        float zp2m;
+        float zp1u;
+        float zp2u;
+        float zp1l;
+        float zp2l;
+        float a;
+        float b;
+        float ztMed;
+        float ztUpp;
+        float ztLow;
+        int32 adcReso;
+    };
+
+    struct OutLinTQuadReply {
+        boolean success;
+        float c0;
+        float c1;
+        float c4;
+        float c6;
+        float c5;
+        float c7;
+    };
+
+    // Request and reply for OutQuadTQuad
+    struct OutQuadTQuadRequest {
+        float zp1m;
+        float zp2m;
+        float zp3m;
+        float zp1u;
+        float zp2u;
+        float zp1l;
+        float zp2l;
+        float a;
+        float b;
+        float m;
+        float ztMed;
+        float ztUpp;
+        float ztLow;
+        int32 adcReso;
+    };
+
+    struct OutQuadTQuadReply {
+        boolean success;
+        float c0;
+        float c1;
+        float c2;
+        float c4;
+        float c6;
+        float c5;
+        float c7;
+    };
+
+    // Request and reply for ZMD31050_cal1
+    struct ZMD31050Cal1Request {
+        float zp1m;
+        float zp2m;
+        float zp3m;
+        float zp4m;
+        float zp1u;
+        float zp2u;
+        float zp1l;
+        float zp2l;
+        float a;
+        float b;
+        float m;
+        float m2;
+        float ztMed;
+        float ztUpp;
+        float ztLow;
+        int32 adcReso;
+    };
+
+    struct ZMD31050Cal1Reply {
+        boolean success;
+        float c0;
+        float c1;
+        float c2;
+        float c3;
+        float c4;
+        float c6;
+        float c5;
+        float c7;
+    };
+
+    // Request and reply for ZMD31050_sim1
+    struct ZMD31050Sim1Request {
+        int32 c0;
+        int32 c1;
+        int32 c2;
+        int32 c3;
+        int32 c4;
+        int32 c5;
+        int32 c6;
+        int32 c7;
+        int32 adcReso;
+        float rangeShift;
+        int32 izMin;
+        int32 izMax;
+        int32 zt;
+        int32 ztMin;
+        int32 ztMax;
+    };
+
+    struct ZMD31050Sim1Reply {
+        boolean success;
+        long result;
+    };
+
+    // Request and reply for DLLVersion
+    struct DLLVersionRequest {
+        // No input parameters
+    };
+
+    struct DLLVersionReply {
+        boolean success;
+        string version;
+    };
+
+    // Request and reply for getMessage
+    struct GetMessageRequest {
+        // No input parameters
+    };
+
+    struct GetMessageReply {
+        string message;
+    };
+
+    // Union for all request types
+    union RequestUnion switch (MessageType) {
+        case OUTLIN_REQUEST:
+            OutLinRequest outLinRequest;
+        case TLIN_REQUEST:
+            TLinRequest tLinRequest;
+        case OUTQUAD_REQUEST:
+            OutQuadRequest outQuadRequest;
+        case OUTTHIRD_REQUEST:
+            OutThirdRequest outThirdRequest;
+        case TQUAD_REQUEST:
+            TQuadRequest tQuadRequest;
+        case OUTLINTLIN_REQUEST:
+            OutLinTLinRequest outLinTLinRequest;
+        case OUTQUADTLIN_REQUEST:
+            OutQuadTLinRequest outQuadTLinRequest;
+        case OUTLINTQUAD_REQUEST:
+            OutLinTQuadRequest outLinTQuadRequest;
+        case OUTQUADTQUAD_REQUEST:
+            OutQuadTQuadRequest outQuadTQuadRequest;
+        case ZMD31050_CAL1_REQUEST:
+            ZMD31050Cal1Request zmd31050Cal1Request;
+        case ZMD31050_SIM1_REQUEST:
+            ZMD31050Sim1Request zmd31050Sim1Request;
+        case DLLVERSION_REQUEST:
+            DLLVersionRequest dllVersionRequest;
+        case GETMESSAGE_REQUEST:
+            GetMessageRequest getMessageRequest;
+    };
+
+    // Union for all reply types
+    union ReplyUnion switch (MessageType) {
+        case OUTLIN_REPLY:
+            OutLinReply outLinReply;
+        case TLIN_REPLY:
+            TLinReply tLinReply;
+        case OUTQUAD_REPLY:
+            OutQuadReply outQuadReply;
+        case OUTTHIRD_REPLY:
+            OutThirdReply outThirdReply;
+        case TQUAD_REPLY:
+            TQuadReply tQuadReply;
+        case OUTLINTLIN_REPLY:
+            OutLinTLinReply outLinTLinReply;
+        case OUTQUADTLIN_REPLY:
+            OutQuadTLinReply outQuadTLinReply;
+        case OUTLINTQUAD_REPLY:
+            OutLinTQuadReply outLinTQuadReply;
+        case OUTQUADTQUAD_REPLY:
+            OutQuadTQuadReply outQuadTQuadReply;
+        case ZMD31050_CAL1_REPLY:
+            ZMD31050Cal1Reply zmd31050Cal1Reply;
+        case ZMD31050_SIM1_REPLY:
+            ZMD31050Sim1Reply zmd31050Sim1Reply;
+        case DLLVERSION_REPLY:
+            DLLVersionReply dllVersionReply;
+        case GETMESSAGE_REPLY:
+            GetMessageReply getMessageReply;
+    };
+
+    // Generic request and reply structures
+    struct GenericRequest {
+        uint32 requestId;
+        RequestUnion request;
+    };
+
+    struct GenericReply {
+        uint32 requestId;
+        ReplyUnion reply;
+    };
+};
