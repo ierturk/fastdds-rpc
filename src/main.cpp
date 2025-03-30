@@ -79,6 +79,8 @@ void run_proxy() {
             // Send the reply
             writer->write(&reply);
             std::cout << "Proxy: Sent reply with version 1.0.0" << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            break;
         }
     }
 
@@ -162,16 +164,16 @@ int main() {
     std::cout << "Main: Starting..." << std::endl;
 
     // Initialize Fast DDS logging
-    Log::SetVerbosity(Log::Kind::Info);  // Set logging level to Info
-    Log::ReportFilenames(true);         // Include filenames in log output
-    Log::ReportFunctions(true);         // Include function names in log output
+    // Log::SetVerbosity(Log::Kind::Info);  // Set logging level to Info
+    // Log::ReportFilenames(true);         // Include filenames in log output
+    // Log::ReportFunctions(true);         // Include function names in log output
 
     // Run the proxy and invoker in separate threads
     std::jthread proxy_thread([] {
         run_proxy();
     });
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));  // Ensure proxy is ready
+    // std::this_thread::sleep_for(std::chrono::milliseconds(1000));  // Ensure proxy is ready
 
     std::jthread invoker_thread([] {
         run_invoker();
@@ -180,7 +182,7 @@ int main() {
     std::cout << "Main: Waiting for threads to finish..." << std::endl;
 
     // Flush logs before exiting
-    Log::Flush();
+    // Log::Flush();
 
     return 0;
 }
