@@ -14,6 +14,8 @@
 #include "RBIC1.h"
 #include "RBIC1PubSubTypes.h"
 
+# include "../rbic1/RBIC1.h"
+
 using namespace eprosima::fastdds::dds;
 
 // Proxy function using WaitSet
@@ -167,6 +169,23 @@ int main() {
     // Log::SetVerbosity(Log::Kind::Info);  // Set logging level to Info
     // Log::ReportFilenames(true);         // Include filenames in log output
     // Log::ReportFunctions(true);         // Include function names in log output
+
+
+    float C0, C1;
+    if (RBIC1::OutLin(1.0f, 2.0f, 3.0f, 4.0f, &C0, &C1)) {
+        std::cout << "OutLin succeeded: C0 = " << C0 << ", C1 = " << C1 << std::endl;
+    } else {
+        std::cout << "OutLin failed!" << std::endl;
+    }
+
+    // Test DLL version
+    char version[256];
+    if (RBIC1::DLLVersion(version)) {
+        std::cout << "DLL Version: " << version << std::endl;
+    } else {
+        std::cout << "Failed to get DLL version!" << std::endl;
+    }
+
 
     // Run the proxy and invoker in separate threads
     std::jthread proxy_thread([] {

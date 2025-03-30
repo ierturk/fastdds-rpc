@@ -1,0 +1,211 @@
+
+Information about the implementation of the new RBIC1 calibration dll function "ZMD31050_cal1" for ZMD31050 and ZMD31150 
+"ZMD31050_cal1" is contained in RBIC1-DLL version >=2.0.
+
+!!!
+!!! remark for ZMD31150:
+!!! => the targets need to be multiplied by 0.6875 for calibrating the analog voltage output. 
+!!!
+
+
+1. function call
+================ 
+int ZMD31050_cal1 ( float Zp1m, float Zp2m ,float Zp3m, float Zp4m, float Zp1u, float Zp2u, float Zp1l,
+float Zp2l, float A, float B, float M, float M2, float Ztmed, float Ztupp, float Ztlow, int adc_reso,
+float *C0, float *C1, float *C2, float *C3, float *C4, float *C6, float *C5, float *C7 ); 
+=> refer RBIC1.h file for detail parameter description
+
+
+2. parameters
+=============
+2.1.) calibration targets
+=> content of "Acquire Raw Data" frame in "Sensor Calibration" dialogue of software
+
+paramter range: [0; 1)
+target order: A < M < M2 < B
+A - output target value for minimum pressure scaled to [%]V range
+M - output target value for 2nd order pressure point scaled to [%]Vs range
+M2 - output target value for 3rd order pressure point scaled to [%]Vs range
+B - output target value for maximum pressure scaled to [%]Vs range
+
+2.2.) acquired pressure (main channel) raw values => cmd: "D8"
+=> content of "Acquire Raw Data" frame in "Sensor Calibration" dialogue of software
+
+parameter range: [-32768; 32767]
+pressure value order: A < M < M2 < B
+Zp1m - pressure minimum value (pmin) at medium temperature (tmed) => P1M in software
+Zp2m - pressure maximum Value (pmax) at medium temperature (tmed) => P2M in software
+Zp3m - press 2nd order nonlinearity (=medium) value at medium temp (tmed) => P3M in software
+Zp4m - press 3rd order nonlinearity at medium temperature (tmed) => P4M in software
+Zp1u - pressure minimum value (pmin) at upper temperature (tmed) => P1U in software
+Zp2u - pressure maximum Value (pmax) at upper temperature (tmed) => P2U in software
+Zp1l - pressure minimum value (pmin) at lower temperature (tmed) => P1L in software
+Zp2l - pressure maximum Value (pmax) at lower temperature (tmed) => P2L in software
+
+2.3.) pressure target and acquiring mapping
+A is target for Zp1m, Zp1u and Zp1l
+M is target Zp3m
+M2 is target Zp4m
+B is target for Zp2m, Zp2u and Zp2l
+
+2.4.) acquired temperature raw values => cmd: "D9"
+=> content of "Press Target" frame in "Sensor Calibration" dialogue of software
+
+parameter range: [-32768; 32767]
+Ztmed- temperature value (tmed) for medium temperature => TMed in software
+Ztupp- temperature value (tupp) for upper temperature  => TUpp in software
+Ztlow- temperature value (tlow) for lower temperature  => TLow in software
+
+2.5.) temperature and pressure raw values tupels
+Zp1m, Zp2m, Zp3m and Zp4m is acquired at Ztmed
+Zp1u and Zp2u is acquired at Ztupp
+Zp1l and Zp2l is acquired at Ztlow
+
+2.4.) ADC resolution data
+=> adjusted in main window of software  
+adc_reso - selected ADC-Resolution [9; 15] => resolution in bit
+
+
+3. result values
+================ 
+*C0 - result-coefficient (Offset)
+*C1 - result-coefficient (Gain)
+*C2 - result-coefficient (NL Gain 2. Order)
+*C3 - result-coefficient (NL Gain 2. Order)
+*C4 - result-coefficient (lin. Offset-TC)
+*C6 - result-coefficient (lin. Gain-TC)
+*C5 - result-coefficient (NL Offset-TC 2.Order)
+*C7 - result-coefficient (NL Gain-TC 2.Order) 
+
+return (integer) 
+=0: pass 
+<>0: fail 
+
+3.1 returned failure codes
+--------------------------
+=> new in version >=2.03 for 31050_cal1
+
+bit0: not used
+bit1: solution calculation error
+   + bit8: coeffs out of range (linear calibration) 
+   + bit9: no real solution/coeff out of range for offset (nonlinear calibration) 
+   + bit10: no real solution/coeff out of range for gain (nonlinear calibration) 
+   + bit11: no real solution/coeff out of range for 2nd order coeff
+   + bit12: no real solution/coeff out of range for 3rd order coeff
+bit2: conditioning calculation range check error
+   + bit8: offset elemination
+   + bit9: gain calculation
+   + bit10: nonlinearity elemination (NL1&2)
+   + bit11: nonlinearity elemination (NL3&4)
+   + bit12: nonlinearity elemination (NL5)
+   + bit13: nonlinearity elemination (NL6)
+   + bit14: nonlinearity elemination (NL7)
+   + bit15: output result
+bit3: temperature behaviour linearisation  calculation error
+   + bit8: offset temperature coeff calculation (c4&c5) 
+   + bit9: gain temperature coeff calculation (c6&c7)
+bit4:  coefficients range check error
+   + bit8: offset coeff range check (c0&c1)
+   + bit9: nonlinearity coeff range check (c2&c3)
+
+
+4. calibration control
+======================
+pressure calibration 
+- only second order: M2 = -1.0
+- only linear: M & M2 = -1.0 
+temperature 
+- only linear: Ztupp or ZTlow <= -33000.0 
+- no temperature calibration: ZTupp and Ztlow <= -33000.0
+
+
+5. function call examples
+=========================
+-> adc_reso like adjusted
+
+5.1.) linear calibration, no temperature
+      with out values: 10% for 1bar, 90% for 10bar
+-> A=0.1; B=0.9; M=0.0; M2=0.0; ZTlow=-33000.0
+-> ZTupp=-33000.0; ZTmed=0.0
+-> ZP1M=<acquired data for 1bar>; ZP2M=<acquired data for 10bar>
+   all other Zp$$: 0.0
+
+5.2.) nonlinear pressure calibration and temperature behaviour
+      elemination of sensor element at"RT" (room temp) and "HT" (hot temp)
+      with out values: 10% for 1bar, 70% for 7bar and 90% for 9bar
+-> A=0.1; B=0.9; M=0.7; M2=0.0; ZTlow=-33000.0
+-> ZTupp=<acquired raw temperature data at RT>
+   and acquired for these temperature
+   -> ZP1M=<acquired data for 1bar>
+   -> ZP3M=<acquired data for 7bar>
+   -> ZP2M=<acquired data for 9bar>
+-> ZTupp=<acquired raw temperature data at HT>
+   and acquired for these temperature
+   -> ZP1U=<acquired data for 1bar>
+   -> ZP2U=<acquired data for 9bar>
+
+
+6. logging/debugging of calibration function call parameter hand over 
+=====================================================================
+a logging/debugging version of the calibration DLL is also available:
+  - standard version: RBIC1.dll_xxxx
+  - standard version: RBIC1.dll_xxxx_debug
+  => "xxxx" identifies the DLL revision
+copy and rename the version to be used to "RBIC1.DLL". 
+
+the debug dll writes a file named "RBIC1_CalLog_YYYYMMDD.txt" into the current working directory
+to verify the parameter hand over for the function call.
+
+
+
+6.1.) example of the "RBIC1_CalLog_YYYYMMDD.txt" logfile:
+
+======================================================================================
+RBIC1 - DLL Version: 2.0.6.3-debug; time: 2011 Jun 07 11:48:59
+TQuad - input data:
+Ztlow/Ztmed/Ztupp=-2222.0/-100.0/1888.0, Tlow/Tmed/Tupp= 0.10000/ 0.50000/ 0.90000, resol= 14
+          X/Y/Z= 0.20746/ 1.60301/ 0.51954
+level 2 - sol:
+Lsg#0: Y1/2/3=-0.0088231/-0.074178/-0.042566 ok?:0
+Lsg#1: Y1/2/3= -11.334/ -12.133/ -11.746 ok?:0
+Lsg#2: Y1/2/3= 0.10787/ 0.90691/ 0.52041 ok?:1
+Lsg#3: Y1/2/3= 0.92703/ 0.99239/ 0.96077 ok?:0
+TQuad - end. (nr_lsg=2, rc=1)
+
+======================================================================================
+RBIC1 - DLL Version: 2.0.6.3-debug; time: 2011 Jun 07 11:48:59
+ZMD31050_cal1 - input data:
+ZP1/3/4/2=-1000.0/-99999.0/ 850.0/1545.0, ZP1/2l=-4000.0/-3000.0, ZP1/2u=1234.0/5555.0
+ZTL/M/U=-2222.0/-100.0/1888.0, A/M/M2/B= 0.10000/-1.00000/ 0.70000/ 0.90000, resol= 14
+
+level 0 - relNL: relNL_min/3rd/mid/max/=   -0.023085/    0.000000/    0.000000/   -0.023085
+calc data:
+ZP1/3/4/2=-1000.00/ 850.00/ 850.00/1545.00, ZP1/2l=-4000.00/-3000.00, ZP1/2u=1234.00/5555.00
+ZTL/M/U=-100.00/-2222.00/1888.00, A/M/M2/B=  0.100/  0.700/  0.700,  0.900, resol=13
+level 0 - sol1: NL2/3=1/0, TLIN/QUAD=1/1, a/b/c/d_sol=             0/-1.4363283e-008/ 0.00032216983/    0.43653311, 
+level 0 - sol3: l[1].offs/gain=      1281.74/      21799.9; l[2].offs/gain=     -23711.8/     -3193.69; l[3].offs/gain=      1281.74/      3193.69; l[4].offs/gain=     -23711.8/     -21799.9; 
+level 2, cnt=2
+level 4 - calc cali, i=2, lnr=1, perr=8196, l[i].Z[lnr].z=-24711.83288, l[i].Z[lnr].g=  7.73772
+level 4 - calc cali, i=3, lnr=1, perr=0, l[i].Z[lnr].z=281.73533, l[i].Z[lnr].g=  0.08822
+level 4 - calc cali, i=3, lnr=2, perr=0, l[i].Z[lnr].z=2826.73533, l[i].Z[lnr].g=  0.88510
+level 4 - calc cali, i=3, lnr=3, perr=0, l[i].Z[lnr].z=2131.73533, l[i].Z[lnr].g=  0.66748
+level 4, cnt=1
+level 5 - calc temp, i=3, l[i].T[0].O_OTC=1165.08777, l[i].T[0].G_GTC=3296.26472
+level 5 - calc temp, i=3, l[i].T[1].O_OTC= -1.15897, l[i].T[1].G_GTC=  1.03084
+level 5 - calc temp, i=3, l[i].T[2].O_OTC=  0.00008, l[i].T[2].G_GTC=  0.00005
+level 5, rc=0, cnt=1, nr_lsg=3
+solution - c0/../c7=1165.08777 3296.26465 -4800.51611   0.00000 -9494.31543 5034.21240 8444.63379 3386.45654
+level 6 - end. (loop=0, rc=0, nr_lsg=3)
+
+
+7. Version history
+==================
+
+rev 2060:
+rev 2061: - failure code fixed for failures in linear (first order) calibration
+rev 2063: - new log file name and date stamp added (old="dll_debug.txt"), 
+            extended logging information
+          - logging for TLIN and TQUAD added
+rev 2065: - TQUAD logging extended 
+
+
