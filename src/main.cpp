@@ -71,12 +71,21 @@ void run_proxy() {
         if (reader->take_next_sample(&request, &info) == ReturnCode_t::RETCODE_OK && info.valid_data) {
             std::cout << "Proxy: Received request with ID " << request.requestId() << std::endl;
 
+            // get rbic1 dll version
+            // create a dummy version
+            char version[256] = "1.0.0";
+            if (RBIC1::DLLVersion(version)) {
+                std::cout << "Proxy: DLL Version: " << version << std::endl;
+            } else {
+                std::cout << "Proxy: Failed to get DLL version!" << std::endl;
+            }
+
             // Create a reply
             RBIC1::GenericReply reply;
             reply.requestId(request.requestId());
             reply.reply().dllVersionReply(RBIC1::DLLVersionReply());
             reply.reply().dllVersionReply().success(true);
-            reply.reply().dllVersionReply().version("1.0.0");
+            reply.reply().dllVersionReply().version(version);
 
             // Send the reply
             writer->write(&reply);
