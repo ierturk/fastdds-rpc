@@ -29,6 +29,15 @@ class Conan2DdsTest(ConanFile):
     def layout(self):
         cmake_layout(self)
 
+        # if self.settings.arch == "x86":
+        #     self.folders.build = "build_proxy"
+        # elif self.settings.arch == "x86_64":
+        #     self.folders.build = "build_invoker"
+
+        # self.cpp.build.bindirs = ["bin"]
+        # self.cpp.build.libdirs = ["lib"]
+        # self.cpp.build.includedirs = ["include"]
+
     def validate(self):
         # Validate compiler supports C++20
         if self.settings.compiler == "gcc" and Version(self.settings.compiler.version) < Version("10"):
@@ -41,8 +50,8 @@ class Conan2DdsTest(ConanFile):
     def generate(self):
         tc = CMakeToolchain(self)
         tc.generator = "Ninja"
-        tc.variables["CMAKE_POSITION_INDEPENDENT_CODE"] = self.options.get_safe("fPIC", True)
-        tc.variables["CMAKE_CXX_STANDARD"] = "20"
+        # tc.variables["CMAKE_POSITION_INDEPENDENT_CODE"] = self.options.get_safe("fPIC", True)
+        # tc.variables["CMAKE_CXX_STANDARD"] = "20"
 
         tc.cache_variables["CMAKE_RUNTIME_OUTPUT_DIRECTORY"] = "bin"
         tc.cache_variables["CMAKE_LIBRARY_OUTPUT_DIRECTORY"] = "lib"

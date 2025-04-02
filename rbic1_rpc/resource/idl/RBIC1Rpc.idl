@@ -1,4 +1,4 @@
-module RBIC1 {
+module RBIC1Rpc {
     // Enum to identify the type of message
     enum MessageType {
         OUTLIN_REQUEST,
