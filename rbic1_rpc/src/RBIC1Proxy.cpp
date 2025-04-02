@@ -64,8 +64,8 @@ void RBIC1Proxy::run() {
             rpc_.getWriter()->write(&reply);
 
             // wait for sending to finish
-            std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-            break;
+            // std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            // break;
         }
     }
 
