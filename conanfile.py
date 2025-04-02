@@ -27,6 +27,25 @@ class FastDdsRpcQml(ConanFile):
         self.requires("fast-dds/2.14.3")
         self.requires("fast-cdr/2.1.0")
 
+        if self.settings.arch != "x86":
+            self.requires("qt/6.5.3")
+
+    def configure(self):
+        if self.settings.arch != "x86":
+            self.options["qt/*"].shared = True
+            self.options["qt/*"].qtquickcontrols = True
+            self.options["qt/*"].qtquickcontrols2 = True
+            self.options["qt/*"].qtdeclarative = True
+            self.options["qt/*"].qttools = True
+            self.options["qt/*"].with_vulkan = False
+            self.options["qt/*"].gui = True
+            self.options["qt/*"].qtqmltools = True
+            self.options["qt/*"].qtquicktools = True
+            self.options["qt/*"].qtshadertools = True
+            self.options["qt/*"].qttranslations = False
+            self.options["qt/*"].qtsvg = True
+            self.options["qt/*"].opengl = "desktop"
+
     def layout(self):
         self.folders.build_folder_vars = ["settings.os", "settings.compiler", "settings.compiler.version", "settings.arch", "settings.build_type"]
         cmake_layout(self)
