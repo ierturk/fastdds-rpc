@@ -3,10 +3,10 @@ from conan.tools.cmake import CMakeToolchain, CMakeDeps, cmake_layout
 from conan.tools.scm import Version
 from conan.errors import ConanInvalidConfiguration
 
-
-class Conan2DdsTest(ConanFile):
-    name = "conan2-dds-test"
-    version = "1.0"
+class FastDdsRpcQml(ConanFile):
+    name = "fats-dds-rpc-qml"
+    description = "Fast DDS RPC QML is a library that provides a QML interface for Fast DDS RPC, enabling easy integration of DDS-based communication in QML applications."
+    version = "0.1.0"
 
     # Binary configuration
     settings = "os", "compiler", "build_type", "arch"
@@ -31,14 +31,6 @@ class Conan2DdsTest(ConanFile):
         self.folders.build_folder_vars = ["settings.os", "settings.compiler", "settings.compiler.version", "settings.arch", "settings.build_type"]
         cmake_layout(self)
 
-        # Set architecture-specific build directories
-        # if self.settings.arch == "x86":
-        #     self.folders.build = "build_proxy"
-        #     self.folders.generators = "build_proxy"  # Place Conan-generated files in build_proxy
-        # elif self.settings.arch == "x86_64":
-        #     self.folders.build = "build_invoker"
-        #     self.folders.generators = "build_invoker"  # Place Conan-generated files in build_invoker
-
     def validate(self):
         # Validate compiler supports C++20
         if self.settings.compiler == "gcc" and Version(self.settings.compiler.version) < Version("10"):
@@ -51,12 +43,6 @@ class Conan2DdsTest(ConanFile):
     def generate(self):
         tc = CMakeToolchain(self)
         tc.generator = "Visual Studio 17 2022"
-
-        # Specify the output directories for Ninja
-        # tc.cache_variables["CMAKE_RUNTIME_OUTPUT_DIRECTORY"] = f"{self.build_folder}/bin"
-        # tc.cache_variables["CMAKE_LIBRARY_OUTPUT_DIRECTORY"] = f"{self.build_folder}/lib"
-        # tc.cache_variables["CMAKE_ARCHIVE_OUTPUT_DIRECTORY"] = f"{self.build_folder}/lib"
-
         tc.generate()
 
         # Generate CMake dependency files
