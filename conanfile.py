@@ -28,15 +28,16 @@ class Conan2DdsTest(ConanFile):
         self.requires("fast-cdr/2.1.0")
 
     def layout(self):
+        self.folders.build_folder_vars = ["settings.os", "settings.compiler", "settings.compiler.version", "settings.arch", "settings.build_type"]
         cmake_layout(self)
 
         # Set architecture-specific build directories
-        if self.settings.arch == "x86":
-            self.folders.build = "build_proxy"
-            self.folders.generators = "build_proxy"  # Place Conan-generated files in build_proxy
-        elif self.settings.arch == "x86_64":
-            self.folders.build = "build_invoker"
-            self.folders.generators = "build_invoker"  # Place Conan-generated files in build_invoker
+        # if self.settings.arch == "x86":
+        #     self.folders.build = "build_proxy"
+        #     self.folders.generators = "build_proxy"  # Place Conan-generated files in build_proxy
+        # elif self.settings.arch == "x86_64":
+        #     self.folders.build = "build_invoker"
+        #     self.folders.generators = "build_invoker"  # Place Conan-generated files in build_invoker
 
     def validate(self):
         # Validate compiler supports C++20
