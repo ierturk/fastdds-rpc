@@ -49,12 +49,12 @@ class Conan2DdsTest(ConanFile):
 
     def generate(self):
         tc = CMakeToolchain(self)
-        tc.generator = "Ninja"
+        tc.generator = "Visual Studio 17 2022"
 
         # Specify the output directories for Ninja
-        tc.cache_variables["CMAKE_RUNTIME_OUTPUT_DIRECTORY"] = f"{self.build_folder}/bin"
-        tc.cache_variables["CMAKE_LIBRARY_OUTPUT_DIRECTORY"] = f"{self.build_folder}/lib"
-        tc.cache_variables["CMAKE_ARCHIVE_OUTPUT_DIRECTORY"] = f"{self.build_folder}/lib"
+        # tc.cache_variables["CMAKE_RUNTIME_OUTPUT_DIRECTORY"] = f"{self.build_folder}/bin"
+        # tc.cache_variables["CMAKE_LIBRARY_OUTPUT_DIRECTORY"] = f"{self.build_folder}/lib"
+        # tc.cache_variables["CMAKE_ARCHIVE_OUTPUT_DIRECTORY"] = f"{self.build_folder}/lib"
 
         tc.generate()
 
