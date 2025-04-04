@@ -25,7 +25,7 @@ This project demonstrates how to use Fast DDS with a QML GUI, managed by Conan 2
 Start a `Cmder` console
 ```bash
 
-# For building invoker app
+# For building invoker (64-bit) app
 λ "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x64
 # Note: Adjust the path to match your Visual Studio installation if it differs.
 λ make all
@@ -35,6 +35,7 @@ Start a `Cmder` console
 # CMake: Select Configure Preset
 # select conan-windows-msvc-194-x86_64-debug config
 
+# For building proxy (32-bit) app
 λ "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x86
 # Note: Modify the path above if your Visual Studio installation is in a different location.
 λ make all
