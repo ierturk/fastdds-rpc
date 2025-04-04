@@ -74,6 +74,8 @@
         "xutility": "cpp",
         "future": "cpp",
         "condition_variable": "cpp",
-        "resumable": "cpp"
+        "resumable": "cpp",
+        "deque": "cpp",
+        "queue": "cpp"
     }
 }

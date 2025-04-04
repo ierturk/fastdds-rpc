@@ -29,6 +29,7 @@ class FastDdsRpcQml(ConanFile):
 
         if self.settings.arch != "x86":
             self.requires("qt/6.5.3")
+            self.requires("boost/1.87.0")
 
     def configure(self):
         if self.settings.arch != "x86":
@@ -42,9 +43,21 @@ class FastDdsRpcQml(ConanFile):
             self.options["qt/*"].qtqmltools = True
             self.options["qt/*"].qtquicktools = True
             self.options["qt/*"].qtshadertools = True
-            self.options["qt/*"].qttranslations = False
+            self.options["qt/*"].qttranslations = True
             self.options["qt/*"].qtsvg = True
             self.options["qt/*"].opengl = "desktop"
+            self.options["qt/*"].qttest = True
+
+            # Boost options
+            self.options["boost/*"].shared = True
+            self.options["boost/*"].header_only = False
+            self.options["boost/*"].without_python = True
+            self.options["boost/*"].without_graph = True
+            self.options["boost/*"].without_test = False
+            self.options["boost/*"].without_wave = True
+            self.options["boost/*"].without_coroutine = False
+            self.options["boost/*"].without_asio = False
+            self.options["boost/*"].without_lockfree = False
 
     def layout(self):
         self.folders.build_folder_vars = ["settings.os", "settings.compiler", "settings.compiler.version", "settings.arch", "settings.build_type"]
@@ -62,6 +75,11 @@ class FastDdsRpcQml(ConanFile):
     def generate(self):
         tc = CMakeToolchain(self)
         tc.generator = "Visual Studio 17 2022"
+
+        # Add _WIN32_WINNT definition for Windows 10 or later
+        if self.settings.os == "Windows":
+            tc.preprocessor_definitions["_WIN32_WINNT"] = "0x0A00"
+
         tc.generate()
 
         # Generate CMake dependency files

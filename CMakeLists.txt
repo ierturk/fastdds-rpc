@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(idl-test LANGUAGES CXX)
+project(fastdds-qml-app LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -42,17 +42,61 @@ endif()
 
 # Create the invoker app (only for 64-bit builds)
 if(IS_64BIT)
+
+    # Qt configuration
+    set(CMAKE_AUTOMOC ON)
+    set(CMAKE_AUTORCC ON)
+    set(CMAKE_AUTOUIC ON)
+
+    # Find dependencies (installed by Conan)
+    find_package(Qt6 COMPONENTS Core Quick Qml REQUIRED)
+    find_package(Boost REQUIRED COMPONENTS system)
+
     set(INVOKER_SOURCES
         src/invoker_main.cpp
+        src/TaskHandler.cpp
+        src/TaskHandler.h
     )
 
-    add_executable(invoker_app ${INVOKER_SOURCES})
+    add_executable(invoker_app
+        ${INVOKER_SOURCES}
+    )
+
+    qt_add_qml_module(invoker_app
+        URI TaskHandlerModule
+        VERSION 1.0
+        QML_FILES
+            src/qml/main.qml
+    )
 
     # Include directories for rbic1_rpc
     target_include_directories(invoker_app PRIVATE
+        src
         ${CMAKE_SOURCE_DIR}/rbic1_rpc/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/../common/mpscchannel
     )
 
     # Link the rbic1_rpc library
-    target_link_libraries(invoker_app PRIVATE rbic1_rpc)
+    target_link_libraries(invoker_app PRIVATE
+        rbic1_rpc
+        Qt6::Core
+        Qt6::Quick
+        Qt6::Qml
+        Boost::system
+    )
+
+    # Windows-specific deployment
+    if(WIN32)
+        # Copy Qt plugins for deployment
+        get_target_property(_qmake_executable Qt6::qmake IMPORTED_LOCATION)
+        get_filename_component(_qt_bin_dir "${_qmake_executable}" DIRECTORY)
+
+        add_custom_command(TARGET invoker_app POST_BUILD
+            COMMAND "${_qt_bin_dir}/windeployqt.exe"
+                    --qmldir "${CMAKE_CURRENT_SOURCE_DIR}/src/qml"
+                    "$<TARGET_FILE:invoker_app>"
+            COMMENT "Deploying Qt dependencies..."
+        )
+    endif()
+
 endif()
