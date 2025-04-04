@@ -46,4 +46,3 @@ Start a `Cmder` console
 ```
 ## License
 This project is licensed under the BSD 3-Clause License, which permits use, distribution, and modification with proper attribution, while disclaiming liability and warranty. See the [LICENSE](./LICENSE) file for full details.
-This project is licensed under the BSD 3-Clause License. See the [LICENSE](./LICENSE) file for details.
