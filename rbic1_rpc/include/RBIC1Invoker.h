@@ -6,6 +6,7 @@
 #include "RBIC1RpcPubSubTypes.h"
 #include <string>
 #include <iostream>
+#include <boost/signals2.hpp>
 
 class RBIC1Invoker {
 public:
@@ -14,6 +15,9 @@ public:
 
     void init(const std::string& reader_topic, const std::string& writer_topic);
     void run();
+
+    // Signal to notify when a reply is received
+    boost::signals2::signal<void(const std::string&)> replyReceived;
 
 private:
     RpcDds<RBIC1Rpc::GenericReply, RBIC1Rpc::GenericRequest, RBIC1Rpc::GenericReplyPubSubType, RBIC1Rpc::GenericRequestPubSubType> rpc_;

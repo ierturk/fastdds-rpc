@@ -54,8 +54,8 @@ if(IS_64BIT)
 
     set(INVOKER_SOURCES
         src/invoker_main.cpp
-        src/TaskHandler.cpp
-        src/TaskHandler.h
+        src/RBIC1RpcBridge.cpp
+        src/RBIC1RpcBridge.h
     )
 
     add_executable(invoker_app

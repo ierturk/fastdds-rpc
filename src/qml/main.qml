@@ -5,31 +5,31 @@ ApplicationWindow {
     visible: true
     width: 640
     height: 480
-    title: "TaskHandler Example"
+    title: "RBIC1RpcBridge Example"
 
     Column {
         anchors.centerIn: parent
         spacing: 20
 
         Button {
-            text: "Start Task"
+            text: "Start RPC Task"
             onClicked: {
-                console.log("Button clicked, starting task...");
-                taskHandler.startTask("Hello, World!");
+                console.log("Button clicked, starting RPC task...");
+                rpcBridge.startRpcTask("ReplyTopic", "RequestTopic");
             }
         }
 
         Text {
-            id: resultText
-            text: "Waiting for task..."
+            id: replyText
+            text: "Waiting for reply..."
         }
     }
 
     Connections {
-        target: taskHandler
-        function onTaskCompleted(result) {
-            console.log("Task completed with result:", result);
-            resultText.text = result;
+        target: rpcBridge
+        function onRpcReplyReceived(reply) {
+            console.log("RPC Reply Received:", reply);
+            replyText.text = reply;
         }
     }
 }

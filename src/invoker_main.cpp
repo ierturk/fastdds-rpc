@@ -2,7 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <boost/asio.hpp>
-#include "TaskHandler.h"
+#include "RBIC1RpcBridge.h"
 
 int main(int argc, char* argv[]) {
     QGuiApplication app(argc, argv);
@@ -11,14 +11,14 @@ int main(int argc, char* argv[]) {
     boost::asio::io_context io_context;
     auto work_guard = boost::asio::make_work_guard(io_context);
 
-    // Create the TaskHandler instance
-    TaskHandler taskHandler(io_context);
+    // Create the RBIC1RpcBridge instance
+    RBIC1RpcBridge rpcBridge(io_context);
 
     // Set up the QML engine
     QQmlApplicationEngine engine;
 
-    // Expose TaskHandler to QML as "taskHandler"
-    engine.rootContext()->setContextProperty("taskHandler", &taskHandler);
+    // Expose RBIC1RpcBridge to QML as "rpcBridge"
+    engine.rootContext()->setContextProperty("rpcBridge", &rpcBridge);
 
     // Load the QML file
     const QUrl url(QStringLiteral("qrc:/TaskHandlerModule/src/qml/main.qml"));

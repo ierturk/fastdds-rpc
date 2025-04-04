@@ -67,6 +67,14 @@ target_include_directories(rbic1_rpc PUBLIC
 find_package(fastcdr REQUIRED)
 find_package(fastdds REQUIRED)
 
+if(IS_64BIT)
+    # Add Boost dependency only for 64-bit builds
+    find_package(Boost REQUIRED COMPONENTS system)
+    target_link_libraries(rbic1_rpc PUBLIC
+        Boost::system
+    )
+endif()
+
 target_link_libraries(rbic1_rpc PUBLIC
     fastcdr
     fast-dds::fast-dds

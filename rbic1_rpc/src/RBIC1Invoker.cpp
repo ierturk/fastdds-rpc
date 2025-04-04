@@ -43,7 +43,11 @@ void RBIC1Invoker::run() {
     eprosima::fastdds::dds::SampleInfo info;
     if (rpc_.getReader()->take_next_sample(&reply, &info) == eprosima::fastrtps::types::ReturnCode_t::RETCODE_OK && info.valid_data) {
         if (reply.reply()._d() == RBIC1Rpc::DLLVERSION_REPLY) {
-            std::cout << "RBIC1Invoker: Received reply with version: " << reply.reply().dllVersionReply().version() << std::endl;
+            std::string version = reply.reply().dllVersionReply().version();
+            std::cout << "RBIC1Invoker: Received reply with version: " << version << std::endl;
+
+            // Emit the signal
+            replyReceived(version);
         }
     }
 
