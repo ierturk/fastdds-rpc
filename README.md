@@ -37,7 +37,6 @@ Start a `Cmder` console
 
 λ "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x86
 # Note: Modify the path above if your Visual Studio installation is in a different location.
-λ "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x86
 λ make all
 λ code .
 
