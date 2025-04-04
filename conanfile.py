@@ -74,7 +74,13 @@ class FastDdsRpcQml(ConanFile):
 
     def generate(self):
         tc = CMakeToolchain(self)
-        tc.generator = "Visual Studio 17 2022"
+        # tc.generator = "Visual Studio 17 2022"
+        tc.generator = "Ninja"
+
+        # Specify the output directories for Ninja
+        tc.cache_variables["CMAKE_RUNTIME_OUTPUT_DIRECTORY"] = f"{self.build_folder}/bin"
+        tc.cache_variables["CMAKE_LIBRARY_OUTPUT_DIRECTORY"] = f"{self.build_folder}/lib"
+        tc.cache_variables["CMAKE_ARCHIVE_OUTPUT_DIRECTORY"] = f"{self.build_folder}/lib"
 
         # Add _WIN32_WINNT definition for Windows 10 or later
         if self.settings.os == "Windows":

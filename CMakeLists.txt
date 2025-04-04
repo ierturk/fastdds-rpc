@@ -4,6 +4,9 @@ project(fastdds-qml-app LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Generate compile_commands.json
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Add subdirectory for rbic1_rpc
 add_subdirectory(rbic1_rpc)
 
