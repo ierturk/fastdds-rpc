@@ -1,5 +1,9 @@
 # Fast DDS QML Example with Conan 2 (using conanfile.py)
 
+[Associated post](https://erturk.me/projects/fastdds-conan-rpc/)
+
+![The app](docs/images/fastdds-conan-rpc.png)
+
 This project demonstrates how to use Fast DDS with a QML GUI, managed by Conan 2 using a conanfile.py recipe. The example also implements a RPC (remote procedure call) over DDS.
 
 ## Prerequisites
