@@ -1,3 +1,7 @@
+# Copyright (c) 2025, Ibrahim Erturk <me@erturk.me>, ErturkMe
+# Licensed under the BSD 3-Clause License.
+# See the LICENSE file in the project root for more information.
+
 cmake_minimum_required(VERSION 3.15)
 project(fastdds-qml-app LANGUAGES CXX)
 
