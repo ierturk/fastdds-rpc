@@ -1,5 +1,6 @@
 # Variables
 BUILD_DIR = build
+START_ENV_SCRIPT = start_env_and_vscode.bat
 
 # Default target
 all: install_x86 install_x64
@@ -15,6 +16,11 @@ install_x64:
 	@echo "Running Conan install for x64..."
 	@conan install . -s arch=x86_64 -s build_type=Release --build=missing
 	@conan install . -s arch=x86_64 -s "&:build_type=Debug" -s build_type=Release
+
+# Start environment and open VS Code
+start_env:
+	@echo "Starting environment and opening VS Code for architecture: $(arch)..."
+	@cmd.exe /c $(START_ENV_SCRIPT) $(arch)
 
 # Clean build directories
 clean:

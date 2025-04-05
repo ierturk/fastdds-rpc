@@ -77,8 +77,9 @@ if(IS_64BIT)
     )
 
     qt_add_qml_module(invoker_app
-        URI TaskHandlerModule
+        URI fastdds_qml_app
         VERSION 1.0
+        RESOURCE_PREFIX /erturk.me/imports
         QML_FILES
             src/qml/main.qml
     )

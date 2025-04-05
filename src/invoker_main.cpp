@@ -21,11 +21,15 @@ int main(int argc, char* argv[]) {
     // Set up the QML engine
     QQmlApplicationEngine engine;
 
+    // set the import path for QML modules
+    engine.addImportPath(":/erturk.me/imports");
+
     // Expose RBIC1RpcBridge to QML as "rpcBridge"
     engine.rootContext()->setContextProperty("rpcBridge", &rpcBridge);
 
     // Load the QML file
-    const QUrl url(QStringLiteral("qrc:/TaskHandlerModule/src/qml/main.qml"));
+    const QUrl url(u"qrc:/erturk.me/imports/fastdds_qml_app/src/qml/main.qml"_qs);
+
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject* obj, const QUrl& objUrl) {
                          if (!obj && url == objUrl)
