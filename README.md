@@ -26,6 +26,10 @@ Start a `Cmder` console
 ```bash
 
 # For building invoker (64-bit) app
+# clone the repo
+λ git clone https://github.com/ierturk/fastdds-rpc.git
+λ cd fastdds-rpc
+#
 λ "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x64
 # Note: Adjust the path to match your Visual Studio installation if it differs.
 λ make all
