@@ -1,12 +1,16 @@
 #include "RBIC1Proxy.h"
 #include "RBIC1.h"
+#include <fastdds/dds/core/condition/WaitSet.hpp>
+
+#include <iostream>
+
 
 RBIC1Proxy::RBIC1Proxy() : rpc_() {}
 
 RBIC1Proxy::~RBIC1Proxy() {}
 
-void RBIC1Proxy::init(const std::string& reader_topic, const std::string& writer_topic) {
-    rpc_.init(reader_topic, writer_topic);
+void RBIC1Proxy::init(const std::string& request_topic, const std::string& reply_topic) {
+    rpc_.init(request_topic, reply_topic);
 }
 
 void RBIC1Proxy::run() {
@@ -40,14 +44,11 @@ void RBIC1Proxy::run() {
         if (rpc_.getReader()->take_next_sample(&request, &info) == eprosima::fastrtps::types::ReturnCode_t::RETCODE_OK && info.valid_data) {
             std::cout << "RBIC1Proxy: Received request with ID " << request.requestId() << std::endl;
 
-            // get dllversion from dll
+            // Get DLL version from DLL
             char version[256] = "1.0.0";
-            if ( RBIC1::DLLVersion(version))
-            {
+            if (RBIC1::DLLVersion(version)) {
                 std::cout << "RBIC1Proxy: DLL version: " << version << std::endl;
-            }
-            else
-            {
+            } else {
                 std::cerr << "RBIC1Proxy: Failed to get DLL version" << std::endl;
             }
 
@@ -58,14 +59,9 @@ void RBIC1Proxy::run() {
             reply.reply().dllVersionReply().success(true);
             reply.reply().dllVersionReply().version(version);
 
-
             // Send the reply
             std::cout << "RBIC1Proxy: Sending reply with version: " << version << std::endl;
             rpc_.getWriter()->write(&reply);
-
-            // wait for sending to finish
-            // std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            // break;
         }
     }
 

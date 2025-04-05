@@ -7,6 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Generate compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Enable testing for the entire project
+enable_testing()
+
 # Add subdirectory for rbic1_rpc
 add_subdirectory(rbic1_rpc)
 
@@ -17,6 +20,13 @@ if(CMAKE_SIZEOF_VOID_P EQUAL 8)
 else()
     message(STATUS "Building for 32-bit architecture")
     set(IS_64BIT FALSE)
+endif()
+
+# Add integration tests only for 64-bit builds
+if(IS_64BIT)
+    add_subdirectory(integrationtests)
+else()
+    message(WARNING "Integration tests are disabled for 32-bit builds.")
 endif()
 
 # Create the proxy app (only for 32-bit builds)
@@ -59,6 +69,7 @@ if(IS_64BIT)
         src/invoker_main.cpp
         src/RBIC1RpcBridge.cpp
         src/RBIC1RpcBridge.h
+        src/RBIC1RpcBridgeIfc.h
     )
 
     add_executable(invoker_app

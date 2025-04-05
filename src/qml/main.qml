@@ -15,7 +15,7 @@ ApplicationWindow {
             text: "Start RPC Task"
             onClicked: {
                 console.log("Button clicked, starting RPC task...");
-                rpcBridge.startRpcTask("ReplyTopic", "RequestTopic");
+                rpcBridge.startRpcTask();
             }
         }
 

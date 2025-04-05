@@ -13,7 +13,7 @@ This project demonstrates how to use Fast DDS with a QML GUI, managed by Conan 2
 - GNU Make
 - VS Code
 - A third-party prebuilt 32-bit library, `ExampleLib`, used for enabling communication between the 32-bit proxy side and the 64-bit invoker side.
-
+- gTest and gMock for test suite for testing and mocking
 ## Libraries from Conan center
 - FastDDS
 - FastDDS CDR
@@ -44,6 +44,10 @@ Start a `Cmder` console
 # ctrl+shift+p
 # CMake: Select Configure Preset
 # select conan-windows-msvc-194-x86-debug config
+```
+All tests will be built for x64; no tests will be built for the x86 build. VS Code tests can be used, or in the console, run under the build directory: `build\windows-msvc-194-x86_64-debug`.
+```
+λ ctest --verbose
 ```
 ## License
 This project is licensed under the BSD 3-Clause License, which permits use, distribution, and modification with proper attribution, while disclaiming liability and warranty. See the [LICENSE](./LICENSE) file for full details.

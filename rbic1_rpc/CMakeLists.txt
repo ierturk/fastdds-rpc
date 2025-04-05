@@ -8,6 +8,22 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Generate compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Detect architecture
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    message(STATUS "Building for 64-bit architecture")
+    set(IS_64BIT TRUE)
+else()
+    message(STATUS "Building for 32-bit architecture")
+    set(IS_64BIT FALSE)
+endif()
+
+# Add the unittests subdirectory only for 64-bit builds
+if(IS_64BIT)
+    add_subdirectory(unittests)
+else()
+    message(WARNING "Unit tests are disabled for 32-bit builds.")
+endif()
+
 # Add custom command for fastddsgen
 set(FASTDDSGEN_IDL_FILE ${CMAKE_CURRENT_SOURCE_DIR}/resource/idl/RBIC1Rpc.idl)
 set(FASTDDSGEN_OUTPUT_DIR ${CMAKE_BINARY_DIR}/fastdds-gen)
@@ -25,15 +41,6 @@ set(GENERATED_SOURCES
     ${FASTDDSGEN_OUTPUT_DIR}/RBIC1Rpc.cxx
     ${FASTDDSGEN_OUTPUT_DIR}/RBIC1RpcPubSubTypes.cxx
 )
-
-# Detect architecture
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    message(STATUS "Building for 64-bit architecture")
-    set(IS_64BIT TRUE)
-else()
-    message(STATUS "Building for 32-bit architecture")
-    set(IS_64BIT FALSE)
-endif()
 
 # Define sources and headers based on architecture
 if(IS_64BIT)
@@ -61,9 +68,10 @@ add_library(rbic1_rpc STATIC ${SOURCES} ${HEADERS})
 
 # Include directories
 target_include_directories(rbic1_rpc PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/../common/rpcdds
-    ${FASTDDSGEN_OUTPUT_DIR}
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/interfaces>
+    $<BUILD_INTERFACE:${FASTDDSGEN_OUTPUT_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/mocks>
 )
 
 # Link dependencies

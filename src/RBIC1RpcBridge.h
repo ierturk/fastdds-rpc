@@ -1,20 +1,24 @@
 #ifndef RBIC1RPCBRIDGE_H
 #define RBIC1RPCBRIDGE_H
 
-#include <QObject>
+#include "RBIC1RpcBridgeIfc.h"
 #include <QString>
 #include <boost/asio.hpp>
 #include "RBIC1Invoker.h"
 
-class RBIC1RpcBridge : public QObject {
+class RBIC1RpcBridge : public RBIC1RpcBridgeIfc {
     Q_OBJECT
-public:
-    explicit RBIC1RpcBridge(boost::asio::io_context& io_context, QObject* parent = nullptr);
 
-    Q_INVOKABLE void startRpcTask(const QString& reader_topic, const QString& writer_topic);
+public:
+    explicit RBIC1RpcBridge(boost::asio::io_context& io_context,
+                            const QString& reader_topic,
+                            const QString& writer_topic,
+                            QObject* parent = nullptr);
+
+    Q_INVOKABLE void startRpcTask() override; // Marked as Q_INVOKABLE
 
 signals:
-    void rpcReplyReceived(const QString& reply);
+    void rpcReplyReceived(const QString& reply) override;
 
 private:
     boost::asio::io_context& io_context_;

@@ -11,8 +11,12 @@ int main(int argc, char* argv[]) {
     boost::asio::io_context io_context;
     auto work_guard = boost::asio::make_work_guard(io_context);
 
+    // Define the reader and writer topics
+    QString reader_topic = "ReplyTopic";
+    QString writer_topic = "RequestTopic";
+
     // Create the RBIC1RpcBridge instance
-    RBIC1RpcBridge rpcBridge(io_context);
+    RBIC1RpcBridge rpcBridge(io_context, reader_topic, writer_topic);
 
     // Set up the QML engine
     QQmlApplicationEngine engine;

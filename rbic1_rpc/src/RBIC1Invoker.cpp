@@ -1,4 +1,7 @@
 #include "RBIC1Invoker.h"
+#include <fastdds/dds/core/condition/WaitSet.hpp>
+
+#include <iostream>
 
 RBIC1Invoker::RBIC1Invoker() : rpc_() {}
 

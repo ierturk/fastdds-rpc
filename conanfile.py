@@ -30,6 +30,7 @@ class FastDdsRpcQml(ConanFile):
         if self.settings.arch != "x86":
             self.requires("qt/6.5.3")
             self.requires("boost/1.87.0")
+            self.requires("gtest/1.16.0")
 
     def configure(self):
         if self.settings.arch != "x86":

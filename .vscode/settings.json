@@ -76,7 +76,8 @@
         "condition_variable": "cpp",
         "resumable": "cpp",
         "deque": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "*.ipp": "cpp"
     },
     "C_Cpp.default.compileCommands": "${workspaceFolder}/build/windows-msvc-194-x86_64-debug/compile_commands.json"
 }
