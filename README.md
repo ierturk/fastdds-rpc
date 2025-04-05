@@ -12,7 +12,7 @@ This project demonstrates how to use Fast DDS with a QML GUI, managed by Conan 2
 - Clink integration with Cmder for enhancing the Windows `cmd` shell experience
 - GNU Make
 - VS Code
-- A third-party prebuilt 32-bit library, `ExampleLib`, used for enabling communication between the 32-bit proxy side and the 64-bit invoker side.
+- A third-party prebuilt 32-bit library, `RBIC1Lib`, used for enabling communication between the 32-bit proxy side and the 64-bit invoker side.
 - gTest and gMock for test suite for testing and mocking
 ## Libraries from Conan center
 - FastDDS
